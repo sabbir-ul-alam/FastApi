@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Path
 import json
+from typing import Optional
 app = FastAPI()
 
 students = {
@@ -21,4 +22,13 @@ def get_student(student_id : int = Path(description= "The ID of the student you 
     return {
         json.dumps(students[student_id],indent=4)
     }
+
+@app.get("/get-by-name")
+def get_student(*, name : Optional[str] = None, test : int):
+    for student_id in students:
+        if students[student_id]["name"] == name:
+            return json.dumps(students[student_id])
+        return {
+            "Data" : "Not found"
+        }
 
